@@ -93,14 +93,12 @@ module SpinToWin
       @banner_queue = [banner]
     end
 
-    private
-
-    def on_increment_todo(*_args)
-      increment_todo!
+    def on_increment_todo(*args)
+      increment_todo!(args[1] || 1)
     end
 
-    def on_increment_done(*_args)
-      increment_done!
+    def on_increment_done(*args)
+      increment_done!(args[1] || 1)
     end
 
     def on_output(*args)
@@ -122,6 +120,8 @@ module SpinToWin
     def on_complete(*_args)
       complete!
     end
+
+    private
 
     def init_spinner
       @run = true

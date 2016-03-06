@@ -5,12 +5,12 @@ require 'spin_to_win/spinner'
 # Spinner
 module SpinToWin
   class << self
-    def increment_todo!
-      Celluloid::Notifications.notifier.publish('spinner_increment_todo')
+    def increment_todo!(count = 1)
+      Celluloid::Notifications.notifier.publish('spinner_increment_todo', count)
     end
 
-    def increment_done!
-      Celluloid::Notifications.notifier.publish('spinner_increment_done')
+    def increment_done!(count = 1)
+      Celluloid::Notifications.notifier.publish('spinner_increment_done', count)
     end
 
     def complete!
@@ -23,6 +23,10 @@ module SpinToWin
 
     def banner(msg)
       Celluloid::Notifications.notifier.publish('spinner_set_banner', msg)
+    end
+
+    def add_banner(msg)
+      Celluloid::Notifications.notifier.publish('spinner_add_banner', msg)
     end
 
     def remove_banner(msg)
