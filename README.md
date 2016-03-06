@@ -3,23 +3,23 @@
 Simple ruby spinner that allows on the fly notifications in the format of:
 
     :title :spinner :finished of :todo [:banner]
-    
-The bare bones spinner is 
 
-    SpinToWin.with_spinner { sleep 1 } 
-    
+The bare bones spinner is
+
+    SpinToWin.with_spinner { sleep 1 }
+
     \
 
-With a title is 
+With a title is
 
     SpinToWin.with_spinner('Zzzz') { sleep 1 }`
-    
+
     Zzzz \
 
 With a title and banner:
 
     SpinToWin.with_spinner('Zzzz') { |spinner| spinner.banner('sleepy'); sleep 1 }
-    
+
     Zzzz \ [sleepy]
 
 The title is persistent but the banner can be changed with calls to the yielded `spinner`
@@ -28,21 +28,53 @@ With title, banner, and todos
 
     SpinToWin.with_spinner('Zzzz') do |spinner|
         spinner.increment_todo!(3)
-        
+
         spinner.banner('snore')
         sleep 1
         spinner.increment_done!
-        
+
         spinner.banner('dream')
         sleep 1
         spinner.increment_done!
-        
+
         spinner.banner('wake up!')
         sleep 1
         spinner.increment_done!
     end
-    
+
     Zzzz \ 3 of 3 [wake up!]
+
+## Threads
+
+Spin to Win is built using [Celluloid](https://github.com/celluloid/celluloid) and was designed to be used by multiple threads.
+
+   SpinToWin.with_spinner('Dreaming about:') do |spinner|
+    futures = [
+      Celluloid::Future.new do
+        SpinToWin.add_banner('ham')
+        sleep 1
+        SpinToWin.increment_done!
+        SpinToWin.remove_banner('ham')
+      end,
+      Celluloid::Future.new do
+        SpinToWin.add_banner('sheep')
+        sleep 2
+        SpinToWin.increment_done!
+        SpinToWin.remove_banner('sheep')
+      end,
+      Celluloid::Future.new do
+        SpinToWin.add_banner('socks')
+        sleep 3
+        SpinToWin.increment_done!
+        SpinToWin.remove_banner('sock')
+      end
+    ]
+    SpinToWin.increment_todo!(futures.size)
+
+    futures.each { |f| f.value }
+   end
+
+Dreaming about: \ 0 of 3 [ham|sheep|socks]
 
 ## Installation
 
@@ -61,7 +93,7 @@ Or install it yourself as:
     $ gem install spin_to_win
 
 ## Usage
-    
+
     Fancy Demo \ 1 of 3 [step 1]
 
 ## Development
