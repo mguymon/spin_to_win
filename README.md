@@ -8,19 +8,19 @@ The bare bones spinner is
 
     SpinToWin.with_spinner { sleep 1 }
 
-    \
+    => \
 
 With a title is
 
     SpinToWin.with_spinner('Zzzz') { sleep 1 }`
 
-    Zzzz \
+    => Zzzz \
 
 With a title and banner:
 
     SpinToWin.with_spinner('Zzzz') { |spinner| spinner.banner('sleepy'); sleep 1 }
 
-    Zzzz \ [sleepy]
+    => Zzzz \ [sleepy]
 
 The title is persistent but the banner can be changed with calls to the yielded `spinner`
 
@@ -42,39 +42,53 @@ With title, banner, and todos
         spinner.increment_done!
     end
 
-    Zzzz \ 3 of 3 [wake up!]
+    => Zzzz \ 3 of 3 [wake up!]
+    
+## Charsets
+
+Supports for UTF-8 chars in the spinner
+
+* circile: ◐ ◓ ◑ ◒
+* bar: ┤ ┘ ┴ └ ├ ┌ ┬ ┐
+* braille: ⣾ ⣽ ⣻ ⢿ ⡿ ⣟ ⣯ ⣷
+
+The spinner charset can be set by setting the `charset` named parameter:
+
+    SpinToWin.with_spinner(charset: :braille) { sleep 1 }
+    
+    => ⣾
 
 ## Threads
 
-Spin to Win is built using [Celluloid](https://github.com/celluloid/celluloid) and was designed to be used by multiple threads.
+Spin to Win is built using [Celluloid](https://github.com/celluloid/celluloid) and was designed to be used by multiple threads. The banner can show an array of active threads.
 
-   SpinToWin.with_spinner('Dreaming about:') do |spinner|
-    futures = [
-      Celluloid::Future.new do
-        SpinToWin.add_banner('ham')
-        sleep 1
-        SpinToWin.increment_done!
-        SpinToWin.remove_banner('ham')
-      end,
-      Celluloid::Future.new do
-        SpinToWin.add_banner('sheep')
-        sleep 2
-        SpinToWin.increment_done!
-        SpinToWin.remove_banner('sheep')
-      end,
-      Celluloid::Future.new do
-        SpinToWin.add_banner('socks')
-        sleep 3
-        SpinToWin.increment_done!
-        SpinToWin.remove_banner('sock')
-      end
-    ]
-    SpinToWin.increment_todo!(futures.size)
+       SpinToWin.with_spinner('Dreaming about:') do |spinner|
+        threads = [
+          Thread.new do
+            SpinToWin.add_banner('ham')
+            sleep 1
+            SpinToWin.increment_done!
+            SpinToWin.remove_banner('ham')
+          end,
+          Thread.new do
+            SpinToWin.add_banner('sheep')
+            sleep 2
+            SpinToWin.increment_done!
+            SpinToWin.remove_banner('sheep')
+          end,
+          Thread.new do
+            SpinToWin.add_banner('socks')
+            sleep 3
+            SpinToWin.increment_done!
+            SpinToWin.remove_banner('sock')
+          end
+        ]
+        SpinToWin.increment_todo!(threads.size)
+    
+        threads.each(&:join)
+       end
 
-    futures.each { |f| f.value }
-   end
-
-Dreaming about: \ 0 of 3 [ham|sheep|socks]
+    Dreaming about: \ 0 of 3 [ham|sheep|socks]
 
 ## Installation
 
@@ -94,7 +108,7 @@ Or install it yourself as:
 
 ## Usage
 
-    Fancy Demo \ 1 of 3 [step 1]
+![](https://raw.githubusercontent.com/mguymon/spin_to_win/master/examples/demo.gif)
 
 ## Development
 
