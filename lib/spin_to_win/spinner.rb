@@ -40,7 +40,7 @@ module SpinToWin
 
     def spin(fps = 12)
       delay = 1.0 / fps
-      iter = previous_msg_size = 0
+      iteration = previous_msg_size = 0
 
       init_spinner
 
@@ -48,7 +48,7 @@ module SpinToWin
       while @run
         output_log
 
-        msg = build_message(iter += 1)
+        msg = build_message(iteration += 1)
         previous_msg_size = print_message(msg, previous_msg_size, delay)
       end
 
@@ -56,18 +56,18 @@ module SpinToWin
         puts "WARNING: spinner completed with pending jobs #{@done_count} of #{@todo_count}"
       end
 
-      $stderr.print build_message(iter)
+      $stderr.print build_message(iteration)
       $stderr.puts ''
 
-      iter
+      iteration
     end
 
-    def increment_todo!
-      @todo_count += 1
+    def increment_todo!(count = 1)
+      @todo_count += count
     end
 
-    def increment_done!
-      @done_count += 1
+    def increment_done!(count = 1)
+      @done_count += count
     end
 
     def complete!
