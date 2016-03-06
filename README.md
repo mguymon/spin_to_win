@@ -22,7 +22,12 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+    SpinToWin.with_spinner do |spinner|
+      spinner.output 'step 1'
+      sleep 1
+      spinner.output 'step 2'
+      sleep 1
+    end
 
 ## Development
 
@@ -33,4 +38,3 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/spin_to_win.
-

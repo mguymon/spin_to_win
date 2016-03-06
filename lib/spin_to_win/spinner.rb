@@ -25,14 +25,15 @@ module SpinToWin
     end
 
     def initialize(title = nil)
-      @title = "#{title} " if title
+      @title = title
 
       subscribe('spinner_increment_todo', :on_increment_todo)
       subscribe('spinner_increment_done', :on_increment_done)
       subscribe('spinner_complete', :on_complete)
       subscribe('spinner_output', :on_output)
-      subscribe('spinner_add_title', :on_add_title)
-      subscribe('spinner_remove_title', :on_remove_title)
+      subscribe('spinner_set_banner', :on_set_banner)
+      subscribe('spinner_add_banner', :on_add_banner)
+      subscribe('spinner_remove_banner', :on_remove_banner)
     end
 
     def spin(fps = 12)
@@ -53,9 +54,7 @@ module SpinToWin
         puts "WARNING: spinner completed with pending jobs #{@done_count} of #{@todo_count}"
       end
 
-      msg = "#{@title}#{SPIN_CHARS[(iter += 1) % SPIN_CHARS.length]}"
-      msg << " #{@done_count} of #{@todo_count}" if @todo_count > 0
-      $stderr.print msg
+      $stderr.print build_message(iter)
       $stderr.puts ''
 
       iter
@@ -73,6 +72,16 @@ module SpinToWin
       @run = false
     end
 
+    def output(msg)
+      @log_queue << msg
+    end
+
+    def banner(banner)
+      @banner_queue = [banner]
+    end
+
+    private
+
     def on_increment_todo(*_args)
       increment_todo!
     end
@@ -85,25 +94,27 @@ module SpinToWin
       @log_queue << args[1]
     end
 
-    def on_add_title(*args)
-      @title_queue << args[1]
+    def on_set_banner(*args)
+      @banner_queue = [args[1]]
     end
 
-    def on_remove_title(*args)
-      @title_queue.reject! { |t| t == args[1] }
+    def on_add_banner(*args)
+      @banner_queue << args[1]
+    end
+
+    def on_remove_banner(*args)
+      @banner_queue.reject! { |t| t == args[1] }
     end
 
     def on_complete(*_args)
       complete!
     end
 
-    private
-
     def init_spinner
       @run = true
       @todo_count = @done_count = 0
       @log_queue = []
-      @title_queue = []
+      @banner_queue = []
     end
 
     def output_log
@@ -113,9 +124,9 @@ module SpinToWin
     end
 
     def build_message(position)
-      msg = "#{@title}#{SPIN_CHARS[(position) % SPIN_CHARS.length]}"
+      msg = "#{@title} #{SPIN_CHARS[(position) % SPIN_CHARS.length]}"
       msg << " #{@done_count} of #{@todo_count}" if @todo_count > 0
-      msg << " [#{@title_queue.join('|')}]" unless @title_queue.empty?
+      msg << " [#{@banner_queue.join('|')}]" unless @banner_queue.empty?
       msg
     end
 

@@ -15,16 +15,16 @@ module SpinToWin
       Celluloid::Notifications.notifier.publish('spinner_complete')
     end
 
-    def queue_output(msg)
+    def output(msg)
       Celluloid::Notifications.notifier.publish('spinner_output', msg)
     end
 
-    def add_title(msg)
-      Celluloid::Notifications.notifier.publish('spinner_add_title', msg)
+    def banner(msg)
+      Celluloid::Notifications.notifier.publish('spinner_set_banner', msg)
     end
 
-    def remove_title(msg)
-      Celluloid::Notifications.notifier.publish('spinner_remove_title', msg)
+    def remove_banner(msg)
+      Celluloid::Notifications.notifier.publish('spinner_remove_banner', msg)
     end
 
     def with_spinner(title = nil, &blk)
