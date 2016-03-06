@@ -9,12 +9,22 @@ module SpinToWin
     include Celluloid
     include Celluloid::Notifications
 
-    SPIN_CHARS = %w(| / - \\).freeze
+    LINE_CHARS = %w(| / - \\).freeze
+    BRAILLE_CHARS = %w(⣾ ⣽ ⣻ ⢿ ⡿ ⣟ ⣯ ⣷).freeze
+    BAR_CHARS = %w(┤ ┘ ┴ └ ├ ┌ ┬ ┐).freeze
+    CIRCLE_CHAR = %w(◐ ◓ ◑ ◒).freeze
+
+    SPIN_CHARS = {
+      line: LINE_CHARS,
+      braille: BRAILLE_CHARS,
+      bar: BAR_CHARS,
+      circle: CIRCLE_CHAR
+    }
 
     class << self
       # rubocop:disable UnusedMethodArgument
-      def with_spinner(title = nil, &blk)
-        spinner = Spinner.new(title)
+      def with_spinner(title = nil, chars = :line, &blk)
+        spinner = Spinner.new(title, chars)
         the_spin = spinner.future.spin
         result = yield(spinner)
         spinner.complete!
@@ -26,8 +36,9 @@ module SpinToWin
       # rubocop:enable UnusedMethodArgument
     end
 
-    def initialize(title = nil)
+    def initialize(title = nil, chars)
       @title = title
+      @chars = chars.to_sym
 
       subscribe('spinner_increment_todo', :on_increment_todo)
       subscribe('spinner_increment_done', :on_increment_done)
@@ -126,7 +137,8 @@ module SpinToWin
     end
 
     def build_message(position)
-      msg = "#{@title} #{SPIN_CHARS[position % SPIN_CHARS.length]}"
+      spinner_characters = SPIN_CHARS[@chars]
+      msg = "#{@title} #{spinner_characters[position % spinner_characters.length]}"
       msg << " #{@done_count} of #{@todo_count}" if @todo_count > 0
       msg << " [#{@banner_queue.join('|')}]" unless @banner_queue.empty?
       msg
