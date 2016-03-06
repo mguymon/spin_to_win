@@ -1,8 +1,8 @@
 # SpinToWin
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/spin_to_win`. To experiment with that code, run `bin/console` for an interactive prompt.
+Simple ruby spinner that allows on the fly notifications in the format of:
 
-TODO: Delete this and the text above, and describe your gem
+    *title :spinner *finished of :todo [*banner]
 
 ## Installation
 
@@ -24,12 +24,14 @@ Or install it yourself as:
 
 ![](https://raw.githubusercontent.com/mguymon/spin_to_win/master/examples/demo.gif)
 
-    SpinToWin.with_spinner do |spinner|
+    SpinToWin.with_spinner('Fancy Demo') do |spinner|
       spinner.banner 'step 1'
       sleep 1
       spinner.banner 'step 2'
       sleep 1
     end
+    
+    Fancy Demo \ 1 of 3 [step 1]
 
 ## Development
 
