@@ -2,7 +2,7 @@
 
 Simple ruby spinner that allows on the fly notifications in the format of:
 
-    *title :spinner *finished of :todo [*banner]
+    :title :spinner :finished of :todo [:banner]
 
 ## Installation
 
