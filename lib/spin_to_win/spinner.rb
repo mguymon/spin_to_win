@@ -14,7 +14,7 @@ module SpinToWin
     BAR_CHARS = %w(┤ ┘ ┴ └ ├ ┌ ┬ ┐).freeze
     CIRCLE_CHAR = %w(◐ ◓ ◑ ◒).freeze
 
-    SPIN_CHARS = {
+    SPIN_CHARSET = {
       line: LINE_CHARS,
       braille: BRAILLE_CHARS,
       bar: BAR_CHARS,
@@ -23,8 +23,8 @@ module SpinToWin
 
     class << self
       # rubocop:disable UnusedMethodArgument
-      def with_spinner(title = nil, chars = :line, &blk)
-        spinner = Spinner.new(title, chars)
+      def with_spinner(title = nil, charset: :line, &blk)
+        spinner = Spinner.new(title, charset: charset)
         the_spin = spinner.future.spin
         result = yield(spinner)
         spinner.complete!
@@ -36,9 +36,9 @@ module SpinToWin
       # rubocop:enable UnusedMethodArgument
     end
 
-    def initialize(title = nil, chars = :line)
+    def initialize(title = nil, charset: :line)
       @title = title
-      @chars = chars.to_sym
+      @charset = SPIN_CHARSET[charset.to_sym]
 
       subscribe('spinner_increment_todo', :on_increment_todo)
       subscribe('spinner_increment_done', :on_increment_done)
@@ -137,8 +137,7 @@ module SpinToWin
     end
 
     def build_message(position)
-      spinner_characters = SPIN_CHARS[@chars]
-      msg = "#{@title} #{spinner_characters[position % spinner_characters.length]}"
+      msg = "#{@title} #{@charset[position % @charset.length]}"
       msg << " #{@done_count} of #{@todo_count}" if @todo_count > 0
       msg << " [#{@banner_queue.join('|')}]" unless @banner_queue.empty?
       msg

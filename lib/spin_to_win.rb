@@ -29,8 +29,8 @@ module SpinToWin
       Celluloid::Notifications.notifier.publish('spinner_remove_banner', msg)
     end
 
-    def with_spinner(title = nil, char = :line, &blk)
-      SpinToWin::Spinner.with_spinner(title, char, &blk)
+    def with_spinner(title = nil, charset: :line, &blk)
+      SpinToWin::Spinner.with_spinner(title, charset: charset, &blk)
     end
   end
 end

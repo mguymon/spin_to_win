@@ -7,7 +7,7 @@ describe SpinToWin do
       subject { described_class.with_spinner('title') { 'test' } }
       let(:expected_output) do
         (0..12).map do |x|
-          spin = SpinToWin::Spinner::SPIN_CHARS[x]
+          spin = SpinToWin::Spinner::SPIN_CHARSET[:line][x]
           %(title #{spin}\b\b\b\b\b\b\b)
         end.join < "\n\n"
       end
