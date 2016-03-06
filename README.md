@@ -4,13 +4,23 @@ Simple ruby spinner that allows on the fly notifications in the format of:
 
     :title :spinner :finished of :todo [:banner]
     
-The bare bones spinner is `SpinToWin.with_spinner { sleep 1 }`
+The bare bones spinner is 
 
-With a title is `SpinToWin.with_spinner('Zzzz') { sleep 1 }` => Zzzz \
+    SpinToWin.with_spinner { sleep 1 } 
+    
+    \
+
+With a title is 
+
+    SpinToWin.with_spinner('Zzzz') { sleep 1 }`
+    
+    Zzzz \
 
 With a title and banner:
 
-    SpinToWin.with_spinner('Zzzz') { |spinner| spinner.banner('sleepy'); sleep 1 }` => Zzzz \ [sleepy]
+    SpinToWin.with_spinner('Zzzz') { |spinner| spinner.banner('sleepy'); sleep 1 }
+    
+    Zzzz \ [sleepy]
 
 The title is persistent but the banner can be changed with calls to the yielded `spinner`
 
