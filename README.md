@@ -22,10 +22,12 @@ Or install it yourself as:
 
 ## Usage
 
+![](https://raw.githubusercontent.com/mguymon/spin_to_win/master/examples/demo.gif)
+
     SpinToWin.with_spinner do |spinner|
-      spinner.output 'step 1'
+      spinner.banner 'step 1'
       sleep 1
-      spinner.output 'step 2'
+      spinner.banner 'step 2'
       sleep 1
     end
 
