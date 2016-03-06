@@ -9,19 +9,21 @@ module SpinToWin
     include Celluloid
     include Celluloid::Notifications
 
-    SPIN_CHARS = %w(| / - \\)
+    SPIN_CHARS = %w(| / - \\).freeze
 
     class << self
+      # rubocop:disable UnusedMethodArgument
       def with_spinner(title = nil, &blk)
         spinner = Spinner.new(title)
         the_spin = spinner.future.spin
-        result = blk.call(spinner)
+        result = yield(spinner)
         spinner.complete!
         the_spin.value
         $stderr.puts ''
         $stderr.flush
         result
       end
+      # rubocop:enable UnusedMethodArgument
     end
 
     def initialize(title = nil)
@@ -124,7 +126,7 @@ module SpinToWin
     end
 
     def build_message(position)
-      msg = "#{@title} #{SPIN_CHARS[(position) % SPIN_CHARS.length]}"
+      msg = "#{@title} #{SPIN_CHARS[position % SPIN_CHARS.length]}"
       msg << " #{@done_count} of #{@todo_count}" if @todo_count > 0
       msg << " [#{@banner_queue.join('|')}]" unless @banner_queue.empty?
       msg
@@ -133,12 +135,14 @@ module SpinToWin
     def print_message(msg, previous_msg_size, delay)
       $stderr.print msg
       if previous_msg_size > msg.size
-        $stderr.print((previous_msg_size - msg.size).times.map { ' ' }.join)
+        white_space = Array.new(previous_msg_size - msg.size) { ' ' }.join
+        $stderr.print(white_space)
       end
 
       sleep delay
 
-      $stderr.print([previous_msg_size, msg.size].max.times.map { "\b" }.join)
+      back_space = Array.new([previous_msg_size, msg.size].max) { "\b" }.join
+      $stderr.print(back_space)
 
       msg.size
     end

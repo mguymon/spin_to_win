@@ -1,6 +1,8 @@
-require "spin_to_win/version"
+# encoding: utf-8
+require 'spin_to_win/version'
 require 'spin_to_win/spinner'
 
+# Spinner
 module SpinToWin
   class << self
     def increment_todo!

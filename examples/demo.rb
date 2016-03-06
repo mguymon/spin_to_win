@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'spin_to_win'
 
 SpinToWin.with_spinner('Fancy Demo') do |spinner|
