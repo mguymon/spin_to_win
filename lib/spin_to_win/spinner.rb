@@ -19,7 +19,7 @@ module SpinToWin
       braille: BRAILLE_CHARS,
       bar: BAR_CHARS,
       circle: CIRCLE_CHAR
-    }
+    }.freeze
 
     class << self
       # rubocop:disable UnusedMethodArgument
@@ -36,7 +36,7 @@ module SpinToWin
       # rubocop:enable UnusedMethodArgument
     end
 
-    def initialize(title = nil, chars)
+    def initialize(title = nil, chars = :line)
       @title = title
       @chars = chars.to_sym
 
