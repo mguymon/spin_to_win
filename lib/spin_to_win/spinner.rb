@@ -9,16 +9,21 @@ module SpinToWin
     include Celluloid
     include Celluloid::Notifications
 
-    LINE_CHARS = %w(| / - \\).freeze
-    BRAILLE_CHARS = %w(⣾ ⣽ ⣻ ⢿ ⡿ ⣟ ⣯ ⣷).freeze
-    BAR_CHARS = %w(┤ ┘ ┴ └ ├ ┌ ┬ ┐).freeze
-    CIRCLE_CHAR = %w(◐ ◓ ◑ ◒).freeze
-
     SPIN_CHARSET = {
-      line: LINE_CHARS,
-      braille: BRAILLE_CHARS,
-      bar: BAR_CHARS,
-      circle: CIRCLE_CHAR
+      line:          %w(| / - \\).freeze,
+      short_braille: %w(⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏).freeze,
+      braille:       %w(⣷ ⣯ ⣟ ⡿ ⢿ ⣻ ⣽ ⣾).freeze,
+      bar:           %w(┤ ┘ ┴ └ ├ ┌ ┬ ┐).freeze,
+      circle:        %w(◐ ◓ ◑ ◒).freeze,
+      bounce:        ["| ●    |", "|  ●   |", "|   ●  |", "|    ● |", "|     ●|",
+                      "|    ● |", "|   ●  |", "|  ●   |", "| ●    |", "|●     |"].freeze,
+      clock:         %w(🕐 🕑 🕒 🕓 🕔 🕕 🕖 🕗 🕘 🕙 🕚).freeze,
+      earth:         %w(🌍 🌍 🌏 🌏 🌎 🌎).freeze,
+      moon:          %w(🌑 🌒 🌓 🌔 🌕 🌖 🌗 🌘).freeze,
+      arrow:         %w(← ↖ ↑ ↗ → ↘ ↓ ↙).freeze,
+      noise:         %w(▓ ▓ ▒ ▒ ░ ░ ▒ ▒).freeze,
+      burger:        %w(☱ ☱ ☲ ☲ ☴ ☴ ☲ ☲).freeze,
+      dot:           %w(⠈ ⠐ ⠠ ⢀ ⡀ ⠄ ⠂ ⠁).freeze
     }.freeze
 
     class << self
